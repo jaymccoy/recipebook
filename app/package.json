@@ -1,0 +1,28 @@
+{
+  "name": "recipebook",
+  "version": "1.0.0",
+  "description": "Recipe manager",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jaymccoy/recipebook.git"
+  },
+  "author": "Jeroen Bouman",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jaymccoy/recipebook/issues"
+  },
+  "homepage": "https://github.com/jaymccoy/recipebook#readme",
+  "dependencies": {
+    "body-parser": "*",
+    "consolidate": "*",
+    "dust": "*",
+    "dustjs-helpers": "*",
+    "dustjs-linkedin": "*",
+    "express": "*",
+    "pg": "*"
+  }
+}
