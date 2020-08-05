@@ -1,6 +1,19 @@
 #docker run --rm   --name pg-docker -e POSTGRES_PASSWORD=docker -d -p 5432:5432 -v $HOME/docker/volumes/postgres:/var/lib/postgresql/data  postgres
 version: '3'
 services:
+  web:
+    build: app/.
+#    command: node app
+    volumes:
+      - .:/usr/app/
+      - /usr/app/node_modules
+    env_file:
+      - database.env # configure postgres
+    ports:
+      - "3000:3000"
+    depends_on:
+      - database
+
   database:
     image: "postgres" # use latest official postgres version
     ports:
