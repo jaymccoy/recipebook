@@ -6,20 +6,19 @@ var express = require("express"),
     pg = require("pg"),
     app = express();
 
-// Connection
-function getConnection() {
-    const connectionString = 'postgresql://woeuyrgvu65HH:"g#4GJ2b@87db@HJ"@127.0.0.1:5432/postgres'
-    const { Pool, Client } = require('pg')
-    var client = new Client({
-        user: 'woeuyrgvu65HH',
-        host: 'localhost',
-        database: 'recipes',
-        password: 'g#4GJ2b@87db@HJ',
-        port: 5432,
-    });
-    client.connect();
-    return client;
-}
+// // Connection
+// function getConnection() {
+//     const { Client } = require('pg')
+//     var client = new Client({
+//         user: 'woeuyrgvu65HH',
+//         host: 'localhost',
+//         database: 'recipes',
+//         password: 'g#4GJ2b@87db@HJ',
+//         port: 5432,
+//     });
+//     client.connect();
+//     return client;
+// }
 
 // Assign Dust Engine to .dust files
 app.engine('dust', cons.dust);
@@ -36,53 +35,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
-// Routes
-app.get('/', function (req, res) {
-    // Connect DB
-        let client=getConnection();
-        client.query('SELECT * FROM recipes', (err, result) => {
-            if (err) console.log('Errors: '+err);
+// Inject all api recipes endpoints
+const api_recipes = require('./routes/api-recipes.js');
+app.use(api_recipes);
 
-            res.render('index', {recipes: result.rows});
-            client.end();
-        })
-    // end connect DB
-});
-
-app.post('/add', function(req, res) {
-    // Connect DB
-        let client=getConnection();
-        client.query('INSERT INTO recipes(name, ingredients, directions) VALUES($1, $2, $3)',
-            [req.body.name, req.body.ingredients, req.body.directions], (err, result) => {
-            if (err) console.log('Errors: '+err);
-            client.end();
-            res.redirect('/');
-        });
-    // end connect DB
-});
-
-app.delete('/delete/:id', function (req, res) {
-    // Connect DB
-        let client=getConnection();
-        client.query('DELETE FROM recipes WHERE id=$1', [req.params.id], (err, result) => {
-            if (err) console.log('Errors: '+err);
-            res.sendStatus(200);
-            client.end();
-        });
-    // end connect DB
-});
-
-app.post('/edit', function(req, res) {
-    // Connect DB
-    let client=getConnection();
-    client.query('UPDATE recipes SET name=$1, ingredients=$2, directions=$3 WHERE id=$4',
-        [req.body.name, req.body.ingredients, req.body.directions, req.body.id], (err, result) => {
-            if (err) console.log('Errors: '+err);
-            client.end();
-            res.redirect('/');
-        });
-    // end connect DB
-});
+// Inject all web recipes endpoints
+const web_recipes = require('./routes/web-recipes.js');
+app.use(web_recipes);
 
 // Server
 app.listen(3000, function () {

@@ -1,7 +1,7 @@
 $(document).ready(function () {
     $('.delete-recipe').on('click', function () {
         var id = $(this).data('id');
-        var url = '/delete/'+id;
+        var url = '/web/recipes/delete/'+id;
         if (confirm('Delete recipe?')) {
             $.ajax({
                 url: url,
@@ -17,6 +17,7 @@ $(document).ready(function () {
         }
     });
 
+    //populate edit form
     $('.edit-recipe').on('click', function () {
         $('#edit-form-name').val($(this).data('name'));
         $('#edit-form-ingredients').val($(this).data('ingredients'));
